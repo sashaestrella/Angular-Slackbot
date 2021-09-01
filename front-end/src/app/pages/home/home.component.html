@@ -1,0 +1,26 @@
+<div class="container">
+    <mat-stepper linear #stepper>
+        <mat-step [editable]="false">
+          <ng-template id="lala" matStepLabel>Agregar pregunta</ng-template>
+          <div class="box">
+            <question-form></question-form>
+          </div>
+        </mat-step>
+        <mat-step [editable]="false">
+          <ng-template matStepLabel>Agregar respuestas</ng-template>
+          <div class="box">
+            <answer-form></answer-form>
+          </div>
+        </mat-step>
+        <mat-step [editable]="false">
+          <ng-template matStepLabel>Hecho!</ng-template>
+          <div class="box">
+            <app-confirmation-data [stepper]="stepper"></app-confirmation-data>
+          </div>
+        </mat-step>
+      </mat-stepper>
+</div>
+<div style="background-image: url(../../assets/img/slack-banner.jpg)">
+  <app-footer></app-footer>
+</div>
+

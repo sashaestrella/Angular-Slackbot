@@ -1,0 +1,13 @@
+<div *ngIf="this.stepperService.questionForm != null && this.stepperService.answersForm != null">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="card text-center" style="width: 200%; font-size: 100%;">
+                <div class="card-body">
+                  <h1 class="card-title"><b> Bien hecho!</b></h1>
+                  <h4 class="card-text">La pregunta con sus respuestas fueron agregadas a la base de datos</h4>
+                  <a href="#" class="btn btn-primary" (click)="stepper.reset()">Agregar otra pregunta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

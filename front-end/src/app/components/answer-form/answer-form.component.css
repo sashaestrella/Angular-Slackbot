@@ -1,0 +1,18 @@
+.btn {
+    padding-left: 10%;
+    padding-right: 10%;
+    border-radius: 10px;
+    font-family: pixel;
+    background-color: rgb(115, 34, 150);
+    border-color: rgb(115, 34, 150);;
+}
+
+.col-form-label {
+    font-size: 90%;
+    margin-bottom: 4%;
+}
+
+.bordeAzul {
+    border-color: #5B6DCD;
+    border-width: 1px;
+}

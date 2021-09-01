@@ -1,0 +1,25 @@
+@font-face {
+  font-family: pixel;
+  src: url(/../../assets/fonts/Gilroy-Medium.woff) format("opentype");
+}
+
+mat-stepper {
+  font-family: pixel;
+  background-color: rgb(71, 2, 92);
+}
+
+.container {
+  border-radius: 10px;
+}
+
+.mat-form-field {
+    margin-top: 16px;
+  }
+
+.box {
+  box-sizing: border-box;
+  border: solid white 2px;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: rgb(71, 2, 92);
+}
