@@ -13,9 +13,13 @@ import { QuestionFormComponent } from './components/question-form/question-form.
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
 import { ConfirmationDataComponent } from './components/confirmation-data/confirmation-data.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './components/footer/footer.component';
+import { ErrorComponent } from './pages/error/error.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { ListadoPreguntasComponent } from './pages/listado-preguntas/listado-preguntas.component';
 
 
 @NgModule({
@@ -25,7 +29,10 @@ import { FooterComponent } from './components/footer/footer.component';
     QuestionFormComponent,
     AnswerFormComponent,
     ConfirmationDataComponent,
-    FooterComponent
+    FooterComponent,
+    ErrorComponent,
+    NavbarComponent,
+    ListadoPreguntasComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +44,8 @@ import { FooterComponent } from './components/footer/footer.component';
     MatStepperModule,
     MatFormFieldModule,
     MatInputModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

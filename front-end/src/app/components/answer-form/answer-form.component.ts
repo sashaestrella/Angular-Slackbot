@@ -1,8 +1,10 @@
 import { BackendService } from './../../../services/backend.service';
 import { Answer } from './../../../models/answer.interface';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StepperService } from 'src/services/stepper.service';
+import { Router } from '@angular/router';
+import { isThisTypeNode } from 'typescript/lib/tsserverlibrary';
 
 @Component({
   selector: 'answer-form',
@@ -11,8 +13,10 @@ import { StepperService } from 'src/services/stepper.service';
 })
 export class AnswerFormComponent implements OnInit {
 
-  constructor(private stepperService: StepperService, private backendService: BackendService) { }
+  constructor(private router: Router, private stepperService: StepperService, private backendService: BackendService) { }
 
+  @Input() values: any;
+  @Output() newValues: EventEmitter<any> = new EventEmitter<any>();
   answerForm!: FormGroup;
 
   ngOnInit(): void {
@@ -22,10 +26,39 @@ export class AnswerFormComponent implements OnInit {
       textoRespuesta3: new FormControl('', Validators.required),
       textoRespuesta4: new FormControl('', Validators.required)
     })
+
+    if(this.values !== undefined) {
+      console.log(this.values);
+      
+      this.answerForm.patchValue({
+        textoRespuesta1: this.values[0].descripcion_respuesta,
+        textoRespuesta2: this.values[1].descripcion_respuesta,
+        textoRespuesta3: this.values[2].descripcion_respuesta,
+        textoRespuesta4: this.values[3].descripcion_respuesta
+      })
+    }
   }
 
   public get f() {
     return this.answerForm.controls;
+  }
+
+  editarEnLaBaseDeDatos() {
+    let answer: Answer = {
+      descripcion_respuesta: this.f.textoRespuesta1.value,
+    }
+    let answer2: Answer = {
+      descripcion_respuesta: this.f.textoRespuesta2.value,
+    }
+    let answer3: Answer = {
+      descripcion_respuesta: this.f.textoRespuesta3.value,
+    }
+    let answer4: Answer = {
+      descripcion_respuesta: this.f.textoRespuesta4.value,
+    }
+
+    let answers = [answer, answer2, answer3, answer4];
+    this.newValues.emit(answers);
   }
 
   addAnswerToDatabase(formValue: any) {
@@ -50,6 +83,9 @@ export class AnswerFormComponent implements OnInit {
       this.backendService.postAnswer(answer).subscribe(
         response => {
           console.log("se agregó la respuesta");
+        },
+        error => {
+          this.router.navigate(['/error']);
         }
       ) 
     } 

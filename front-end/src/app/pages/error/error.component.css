@@ -1,0 +1,23 @@
+.text-error {
+    font-family: pixel;
+    font-size: 400%;
+    color: bisque;
+}
+
+.container {
+    display: flex;
+    max-width: 960px;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10%;
+}
+
+.btn {
+    margin-top: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+    border-radius: 10px;
+    font-family: pixel;
+    background-color: rgb(115, 34, 150);
+    border-color: rgb(115, 34, 150);;
+}

@@ -1,0 +1,26 @@
+.navbar {
+    font-family: pixel;
+ }
+
+.navbar-brand {
+    margin-left: 25%;
+}
+
+#navbarSupportedContent {
+    margin-left: 25%;
+}
+
+#nav-brand-text{
+    color: rgb(52, 90, 146);
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: 5%;
+}
+
+.nav-item {
+    margin-right: 10px;
+}
+
+.nav-item:hover {
+    background-color:whitesmoke;
+}
