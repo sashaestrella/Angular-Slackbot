@@ -1,0 +1,7 @@
+<div mat-dialog-content>
+    <p>{{mensaje}}</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="cerrarDialogo()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="accion" cdkFocusInitial>Aceptar</button>
+  </div>

@@ -19,21 +19,26 @@ export class AnswerFormComponent implements OnInit {
   @Input() agregar: boolean = false;
   @Output() newValues: EventEmitter<any> = new EventEmitter<any>();
   answerForm!: FormGroup;
+  answers = [
+    'a', 'b', 'c', 'd'
+  ]
 
   ngOnInit(): void {
     this.answerForm = new FormGroup({
       textoRespuesta1: new FormControl('', Validators.required),
       textoRespuesta2: new FormControl('', Validators.required),
       textoRespuesta3: new FormControl('', Validators.required),
-      textoRespuesta4: new FormControl('', Validators.required)
+      textoRespuesta4: new FormControl('', Validators.required),
+      respuestaPregunta: new FormControl('', Validators.required)
     })
 
     if(this.values !== undefined && this.agregar == false) {
       this.answerForm.patchValue({
-        textoRespuesta1: this.values[0].descripcion_respuesta,
-        textoRespuesta2: this.values[1].descripcion_respuesta,
-        textoRespuesta3: this.values[2].descripcion_respuesta,
-        textoRespuesta4: this.values[3].descripcion_respuesta
+        textoRespuesta1: this.values.answers[0].descripcion_respuesta,
+        textoRespuesta2: this.values.answers[1].descripcion_respuesta,
+        textoRespuesta3: this.values.answers[2].descripcion_respuesta,
+        textoRespuesta4: this.values.answers[3].descripcion_respuesta,
+        respuestaPregunta: this.values.correctAnswer
       })
     }
   }
@@ -43,59 +48,58 @@ export class AnswerFormComponent implements OnInit {
   }
 
   editarEnLaBaseDeDatos() {
-    let answer: Answer = {
-      descripcion_respuesta: this.f.textoRespuesta1.value,
+    let answer1: Answer = {
+      descripcion_respuesta: this.f.textoRespuesta1.value
     }
     let answer2: Answer = {
-      descripcion_respuesta: this.f.textoRespuesta2.value,
+      descripcion_respuesta: this.f.textoRespuesta2.value
     }
     let answer3: Answer = {
-      descripcion_respuesta: this.f.textoRespuesta3.value,
+      descripcion_respuesta: this.f.textoRespuesta3.value
     }
     let answer4: Answer = {
-      descripcion_respuesta: this.f.textoRespuesta4.value,
+      descripcion_respuesta: this.f.textoRespuesta4.value
     }
 
-    let answers = [answer, answer2, answer3, answer4];
-    this.newValues.emit(answers);
+    let valuesForEmit: any = {
+      question: this.f.respuestaPregunta.value,
+      answers: [answer1, answer2, answer3, answer4]
+    }
+
+    this.newValues.emit(valuesForEmit);
   }
 
   addAnswerToDatabase(formValue: any) {
     this.stepperService.answersForm = formValue;
+    this.stepperService.questionForm.respuesta_correcta = formValue.respuestaPregunta;
 
-    for(let i=0; i < 4; i++) {
-      let descripRespuesta;
-      if(i == 0) {
-        descripRespuesta = formValue.textoRespuesta1
-      } else if(i == 1) {
-        descripRespuesta = formValue.textoRespuesta2
-      } else if(i == 2) {
-        descripRespuesta = formValue.textoRespuesta3
-      }  else {
-        descripRespuesta = formValue.textoRespuesta4
-      }
-
-      let answer: Answer = {
-        descripcion_respuesta: descripRespuesta
-      }
-
-      this.backendService.postAnswer(answer).subscribe(
-        response => {
-          console.log("se agregó la respuesta");
-        },
-        error => {
-          this.stepperService.showError = true;
-          this.router.navigate(['/error']);
-        }
-      ) 
-    } 
-
-    let answers = {
-      respuesta1: formValue.textoRespuesta1,
-      respuesta2: formValue.textoRespuesta2,
-      respuesta3: formValue.textoRespuesta3,
-      respuesta4: formValue.textoRespuesta4
+    let answer1: Answer = {
+      descripcion_respuesta: formValue.textoRespuesta1
     }
+    let answer2: Answer = {
+      descripcion_respuesta: formValue.textoRespuesta2
+    }
+    let answer3: Answer = {
+      descripcion_respuesta: formValue.textoRespuesta3
+    }
+    let answer4: Answer = {
+      descripcion_respuesta: formValue.textoRespuesta4
+    }
+
+    let answers = [answer1, answer2, answer3, answer4];
+    let questionPost: any = {
+      question: this.stepperService.questionForm,
+      answers: answers
+    }
+
+    this.backendService.postQuestionAndAnswers(questionPost).subscribe(
+      response => {
+        console.log("se insertó la pregunta con las respuestas");
+      },
+      error => {
+        this.router.navigate(['/error']);
+      }
+    )
 
     this.newValues.emit(answers);
   }

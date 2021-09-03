@@ -1,3 +1,4 @@
+import { Answer } from './../models/answer.interface';
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs';
@@ -10,20 +11,20 @@ export class BackendService {
 
   private URL = 'http://localhost:3000/api';
 
-  postQuestion(question: any): Observable<any> {
+  postQuestionAndAnswers(question: any): Observable<any> {
     return this.http.post<any>(`${this.URL}/agregarPregunta`, question)
   }
 
-  postAnswer(answer: any): Observable<any> {
+  /* postAnswer(answer: any): Observable<any> {
     return this.http.post<any>(`${this.URL}/agregarRespuesta`, answer)
-  }
+  } */
   
   getQuestions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.URL}/obtenerPreguntas`);
   }
 
-  getAnswersForQuestion(id: any): Observable<any[]> {
-    return this.http.get<any[]>(`${this.URL}/obtenerRespuestas/` + id);
+  getAnswers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.URL}/obtenerRespuestas`);
   }
 
   editQuestion(id: any, question: any): Observable<any> {

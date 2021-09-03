@@ -2,6 +2,8 @@ import { Answer } from './../../../models/answer.interface';
 import { BackendService } from './../../../services/backend.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, Routes } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 
 export interface PeriodicElement {
   name: string;
@@ -30,10 +32,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ListadoPreguntasComponent implements OnInit {
   @Input() newValues: any;
+  values: any = [];
   displayedColumns: string[] = ['id_pregunta', 'texto_pregunta', 'respuesta_correcta', 'respuestas', 'editar', 'eliminar'];
   displayedColumns2: string[] = ['id_respuesta', 'id_pregunta', 'descripcion_respuesta', 'editarRespuesta'];
-  dataSource: any = [];
+  questions: any = [];
   answers: any = [];
+  questionAnswers: any = [];
   hayRespuestas: boolean = false;
   editar: boolean = false;
   editRespuesta: boolean = false;
@@ -41,12 +45,21 @@ export class ListadoPreguntasComponent implements OnInit {
   questionId: any;
   answersForEdit: any = [];
 
-  constructor(private router: Router, private backendService: BackendService) { }
+  constructor(private router: Router, private backendService: BackendService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.backendService.getQuestions().subscribe(
       response => {
-        this.dataSource = response;
+        this.questions = response;
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    )
+
+    this.backendService.getAnswers().subscribe(
+      response => {
+        this.answers = response;
       },
       error => {
         console.log("Error: ", error);
@@ -54,16 +67,47 @@ export class ListadoPreguntasComponent implements OnInit {
     )
   }
 
+  openDialogForEdit(newValues: any): void {
+    this.editar = true;
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: `¿Desea editar la pregunta seleccionada?`
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.editar = result;
+      if(this.editar){
+        this.editarEnLaBaseDeDatos(newValues);
+      }
+    });
+  }
+
+  openDialogForEditAnswers(newValues: any) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: `¿Desea editar las respuestas de la pregunta seleccionada?`
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.editar = result;
+      if(this.editar){
+        this.editarRespuestaEnLaBaseDeDatos(newValues);
+      }
+    });
+  }
+
   editarPregunta(id: any) {
-    this.editRespuesta = false;
     this.questionId = id;
     this.editar = true;
     this.hayRespuestas = false;
-    this.question = this.dataSource.find((q: any) => q.id_pregunta == id);
+    this.editRespuesta = false;
+
+    this.question = this.questions.find((q: any) => q.id_pregunta == id);
   }
 
   editarEnLaBaseDeDatos(newValues: any) {
     this.editar = false;
+    this.hayRespuestas = false;
+    this.editRespuesta = false;
+
     this.backendService.editQuestion(this.questionId, newValues).subscribe(
       response => {
         console.log("Se editó la pregunta");
@@ -83,13 +127,17 @@ export class ListadoPreguntasComponent implements OnInit {
 
   editarRespuestaEnLaBaseDeDatos(newValuesForAnswer: any) {
     console.log(newValuesForAnswer);
-    let ids = this.answers.map((a: any) => a.id_respuesta);
+    let ids = this.questionAnswers.map((a: any) => a.id_respuesta);
     let answersToEdit = {
-      answers: newValuesForAnswer,
-      ids: ids
+      answers: newValuesForAnswer.answers,
+      ids: ids,
+      respuesta_correcta: newValuesForAnswer.question
     }
-    
+
+    this.editar = false;
     this.editRespuesta = false;
+    this.hayRespuestas = false;
+
     this.backendService.editAnswers(this.questionId, answersToEdit).subscribe(
       response => {
         console.log("Se editó la pregunta con las nuevas respuestas");
@@ -100,6 +148,19 @@ export class ListadoPreguntasComponent implements OnInit {
       }
     ) 
     window.location.reload();
+  }
+
+  openDialogForDelete(id: any) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: `¿Desea eliminar la pregunta seleccionada?`
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.editar = result;
+      if(this.editar){
+        this.eliminarPregunta(id);
+      }
+    });
   }
 
   eliminarPregunta(id: any) {
@@ -118,19 +179,19 @@ export class ListadoPreguntasComponent implements OnInit {
     this.editRespuesta = false;
     this.hayRespuestas = true;
     this.editar = false;
-    this.backendService.getAnswersForQuestion(id).subscribe(
-      response => {
-        this.answers = response;
-      },
-      error => {
-        this.hayRespuestas = false;
-        console.log("Error: ", error);
-      }
-    )
+    this.questionAnswers = this.answers.filter((ans: any) => ans.id_pregunta === id);
+    this.question = this.questions.find((q: any) => q.id_pregunta == id);
+
+    this.values = {
+      answers: this.questionAnswers,
+      correctAnswer: this.question.respuesta_correcta
+    }
   }
 
   mostrarNuevasRespuestas(respuestas: any) {
     this.answers = respuestas;
     this.hayRespuestas = false;
+    this.editar = false;
+    this.editRespuesta = false;
   }
 }

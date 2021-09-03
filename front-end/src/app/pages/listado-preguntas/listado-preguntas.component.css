@@ -7,4 +7,10 @@ table {
     padding-right: 10%;
     border-radius: 10px;
     font-family: pixel;
+    width: 70%;
+}
+
+.card-body {
+    background-color: rgb(71, 2, 92);
+    border-width: 2px;
 }

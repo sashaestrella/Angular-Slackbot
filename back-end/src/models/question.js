@@ -25,17 +25,33 @@ module.exports = {
             });
         });
     },
-    obtenerRespuestasDePregunta(idPregunta) {
+    obtenerRespuestas() {
         return new Promise((resolve, reject) => {
-            conexion.query('select * from Respuestas where id_pregunta = '+ idPregunta +';', (err, resultados) => {
+            conexion.query('select * from Respuestas;', (err, resultados) => {
                     if (err) reject(err);
                     else resolve(resultados);
             });
         });
     },
-    editarPregunta(idPregunta, descripcion, respuestaCorrecta) {
+    obtenerRespuestasDePregunta(idPregunta) {
         return new Promise((resolve, reject) => {
-            conexion.query('update Preguntas set descripcion_pregunta = "' + descripcion + '", respuesta_correcta = "' + respuestaCorrecta + '" where id_pregunta = ' + idPregunta +';', (err, resultados) => {
+            conexion.query('select * from Respuestas r join Preguntas p on p.id_pregunta = r.id_pregunta where r.id_pregunta = '+ idPregunta +';', (err, resultados) => {
+                    if (err) reject(err);
+                    else resolve(resultados);
+            });
+        });
+    },
+    editarDescripcionPregunta(idPregunta, descripcion) {
+        return new Promise((resolve, reject) => {
+            conexion.query('update Preguntas p set descripcion_pregunta = "' + descripcion + '" where p.id_pregunta = ' + idPregunta +';', (err, resultados) => {
+                    if (err) reject(err);
+                    else resolve(resultados.insertId);
+            });
+        });
+    },
+    editarRespuestaCorrectaPregunta(idPregunta, respuesta) {
+        return new Promise((resolve, reject) => {
+            conexion.query('update Preguntas p set respuesta_correcta = "' + respuesta + '" where p.id_pregunta = ' + idPregunta +';', (err, resultados) => {
                     if (err) reject(err);
                     else resolve(resultados.insertId);
             });
@@ -51,7 +67,7 @@ module.exports = {
     },
     editarRespuesta(idPregunta, id, respuesta) {
         return new Promise((resolve, reject) => {
-            conexion.query('update Respuestas set descripcion_respuesta = "' + respuesta + '" where id_respuesta = '+ id + ';', (err, resultados) => {
+            conexion.query('update Respuestas r set descripcion_respuesta = "' + respuesta + '" where r.id_respuesta = '+ id + ';', (err, resultados) => {
                 if (err) reject(err);
                 else resolve(resultados.insertId);
             });

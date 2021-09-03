@@ -25,7 +25,19 @@
             </div> 
           </div>
 
-          <button *ngIf="values === undefined" [disabled]="answerForm.invalid" type="submit" class="btn btn-primary" mat-button matStepperNext>Continuar</button>
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0"><mark>Selecciona la respuesta correcta a la pregunta: </mark></legend>
+                <div class="form-check form-check-inline" *ngFor="let answer of answers" style="margin-left: 1.6%; margin-bottom: 7%;">
+                  <input class="form-check-input" type="radio" name="respuestaPregunta" id="gridRadios1" [value]="answer" formControlName="respuestaPregunta">
+                  <label class="form-check-label" for="gridRadios1">
+                    {{answer}}
+                  </label>
+                </div>
+            </div>
+          </fieldset>
+
+          <button *ngIf="values === undefined" [disabled]="answerForm.invalid" type="submit" class="btn btn-primary" style="color: white;" mat-button matStepperNext>Continuar</button>
           <button *ngIf="values !== undefined" type="button" class="btn btn-danger" style="margin-top: 3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
           <button *ngIf="agregar" type="submit" class="btn btn-primary" style="margin-top: 3%;">Agregar</button>
         </form>

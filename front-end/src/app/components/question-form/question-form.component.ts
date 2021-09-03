@@ -17,20 +17,15 @@ export class QuestionFormComponent implements OnInit {
   @Input() values: any;
   @Output() newValues: EventEmitter<any> = new EventEmitter<any>();
   questionForm!: FormGroup;
-  answers = [
-    'a', 'b', 'c', 'd'
-  ]
 
   ngOnInit(): void {
     this.questionForm = new FormGroup({
-      textoPregunta: new FormControl('', Validators.required),
-      respuestaPregunta: new FormControl('', Validators.required)
+      textoPregunta: new FormControl('', Validators.required)
     })
 
     if(this.values !== undefined) {
       this.questionForm.patchValue({
-        textoPregunta: this.values.descripcion_pregunta,
-        respuestaPregunta: this.values.respuesta_correcta
+        textoPregunta: this.values.descripcion_pregunta
       })
     }
   }
@@ -40,28 +35,18 @@ export class QuestionFormComponent implements OnInit {
   }
 
   editarEnLaBaseDeDatos() {
-    let question: Question = {
-      descripcion_pregunta: this.f.textoPregunta.value,
-      respuesta_correcta: this.f.respuestaPregunta.value
+    let question: any = {
+      descripcion_pregunta: this.f.textoPregunta.value
     }
     this.newValues.emit(question);
   }
 
   addQuestionToDatabase(formValue: any) {
-    this.stepperService.questionForm = formValue;
-
     let question: Question = {
       descripcion_pregunta: formValue.textoPregunta,
-      respuesta_correcta: formValue.respuestaPregunta
+      respuesta_correcta: ''
     }
-    this.backendService.postQuestion(question).subscribe(
-      response => {
-        console.log("se agregó la pregunta");
-      },
-      error => {
-        this.router.navigate(['/error']);
-      }
-    )
+    this.stepperService.questionForm = question;
     this.stepperService.questionError = formValue.textoPregunta;
   }
 

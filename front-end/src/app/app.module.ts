@@ -20,7 +20,10 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ListadoPreguntasComponent } from './pages/listado-preguntas/listado-preguntas.component';
-
+import { DialogComponent } from './components/dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog'
+import { MatButtonModule } from '@angular/material/button';
+import { AnimatedBackgroundComponent } from './components/animated-background/animated-background.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +35,9 @@ import { ListadoPreguntasComponent } from './pages/listado-preguntas/listado-pre
     FooterComponent,
     ErrorComponent,
     NavbarComponent,
-    ListadoPreguntasComponent
+    ListadoPreguntasComponent,
+    DialogComponent,
+    AnimatedBackgroundComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +50,9 @@ import { ListadoPreguntasComponent } from './pages/listado-preguntas/listado-pre
     MatFormFieldModule,
     MatInputModule,
     HttpClientModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
