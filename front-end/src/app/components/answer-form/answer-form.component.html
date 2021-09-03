@@ -27,6 +27,7 @@
 
           <button *ngIf="values === undefined" [disabled]="answerForm.invalid" type="submit" class="btn btn-primary" mat-button matStepperNext>Continuar</button>
           <button *ngIf="values !== undefined" type="button" class="btn btn-danger" style="margin-top: 3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
+          <button *ngIf="agregar" type="submit" class="btn btn-primary" style="margin-top: 3%;">Agregar</button>
         </form>
       </div>
     </div>

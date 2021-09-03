@@ -62,6 +62,7 @@ export class QuestionFormComponent implements OnInit {
         this.router.navigate(['/error']);
       }
     )
+    this.stepperService.questionError = formValue.textoPregunta;
   }
 
 }

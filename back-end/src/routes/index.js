@@ -59,17 +59,21 @@ router.put('/editarPregunta/:id', function (req, res, next) {
 router.put('/editarRespuestas/:id', function (req, res, next) {
     const { ids, answers } = req.body;
     if (!answers || !ids) {
+        res.setHeader('Content-Type', 'text/plain');
         return res.status(500).send("No hay valores ingresados");
     }
 
-    question
-        .editarRespuestas(req.params.id, ids, answers)
-        .then(quest => {
-            console.log("se editó la pregunta");
-        })
-        .catch(err => {
-            return res.status(500).send("Error editando la pregunta");
-        });
+    for (var i = 0; i < 4; i++) {
+        question
+            .editarRespuesta(req.params.id, ids[i], answers[i].descripcion_respuesta)
+            .then(quest => {
+                console.log("se editó la pregunta");
+            })
+            .catch(err => {
+                res.setHeader('Content-Type', 'text/plain');
+                return res.status(500).send("Error editando la pregunta");
+            });
+    }
 });
 
 router.post('/agregarPregunta', function (req, res, next) {

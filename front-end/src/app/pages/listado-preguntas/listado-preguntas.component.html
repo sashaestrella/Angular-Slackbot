@@ -67,5 +67,9 @@
 </div>
 
 <div class="container" *ngIf="editRespuesta" style="margin-top: 1%">
-    <answer-form [values]="answers" (newValues)="editarRespuestaEnLaBaseDeDatos($event)"></answer-form>
+    <answer-form [values]="answers" [agregar]="false" (newValues)="editarRespuestaEnLaBaseDeDatos($event)"></answer-form>
+</div>
+
+<div class="container" *ngIf="hayRespuestas && answers.length === 0" style="margin-top: 1%">
+  <answer-form [agregar]="true" (newValues)="mostrarNuevasRespuestas($event)"></answer-form>
 </div>

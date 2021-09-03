@@ -49,23 +49,11 @@ module.exports = {
             });
         });
     },
-    editarRespuestas(idPregunta, ids, respuestas) {
+    editarRespuesta(idPregunta, id, respuesta) {
         return new Promise((resolve, reject) => {
-            conexion.query('update Respuestas set descripcion_respuesta = "' + respuestas[0].descripcion_respuesta + '" where id_pregunta = ' + idPregunta + 'and id_respuesta = '+ ids[0] + ';', (err, resultados) => {
+            conexion.query('update Respuestas set descripcion_respuesta = "' + respuesta + '" where id_respuesta = '+ id + ';', (err, resultados) => {
                 if (err) reject(err);
-                //else resolve(resultados.insertId);
-            });
-            conexion.query('update Respuestas set descripcion_respuesta = "' + respuestas[1].descripcion_respuesta + '" where id_pregunta = ' + idPregunta + 'and id_respuesta = '+ ids[1] + ';', (err, resultados) => {
-                if (err) reject(err);
-                //else resolve(resultados.insertId);
-            });
-            conexion.query('update Respuestas set descripcion_respuesta = "' + respuestas[2].descripcion_respuesta + '" where id_pregunta = ' + idPregunta + 'and id_respuesta = '+ ids[2] + ';', (err, resultados) => {
-                if (err) reject(err);
-                //else resolve(resultados.insertId);
-            });
-            conexion.query('update Respuestas set descripcion_respuesta = "' + respuestas[3].descripcion_respuesta + '" where id_pregunta = ' + idPregunta + 'and id_respuesta = '+ ids[3] + ';', (err, resultados) => {
-                if (err) reject(err);
-                //else resolve(resultados.insertId);
+                else resolve(resultados.insertId);
             });
         });
     }

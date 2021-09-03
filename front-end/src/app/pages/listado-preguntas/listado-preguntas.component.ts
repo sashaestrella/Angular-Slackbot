@@ -41,7 +41,6 @@ export class ListadoPreguntasComponent implements OnInit {
   questionId: any;
   answersForEdit: any = [];
 
-
   constructor(private router: Router, private backendService: BackendService) { }
 
   ngOnInit(): void {
@@ -100,7 +99,7 @@ export class ListadoPreguntasComponent implements OnInit {
         console.log("Error: ", error);
       }
     ) 
-    //window.location.reload();
+    window.location.reload();
   }
 
   eliminarPregunta(id: any) {
@@ -128,5 +127,10 @@ export class ListadoPreguntasComponent implements OnInit {
         console.log("Error: ", error);
       }
     )
+  }
+
+  mostrarNuevasRespuestas(respuestas: any) {
+    this.answers = respuestas;
+    this.hayRespuestas = false;
   }
 }

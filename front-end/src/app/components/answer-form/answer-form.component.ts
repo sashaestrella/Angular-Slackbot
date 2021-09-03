@@ -16,6 +16,7 @@ export class AnswerFormComponent implements OnInit {
   constructor(private router: Router, private stepperService: StepperService, private backendService: BackendService) { }
 
   @Input() values: any;
+  @Input() agregar: boolean = false;
   @Output() newValues: EventEmitter<any> = new EventEmitter<any>();
   answerForm!: FormGroup;
 
@@ -27,9 +28,7 @@ export class AnswerFormComponent implements OnInit {
       textoRespuesta4: new FormControl('', Validators.required)
     })
 
-    if(this.values !== undefined) {
-      console.log(this.values);
-      
+    if(this.values !== undefined && this.agregar == false) {
       this.answerForm.patchValue({
         textoRespuesta1: this.values[0].descripcion_respuesta,
         textoRespuesta2: this.values[1].descripcion_respuesta,
@@ -85,10 +84,20 @@ export class AnswerFormComponent implements OnInit {
           console.log("se agregó la respuesta");
         },
         error => {
+          this.stepperService.showError = true;
           this.router.navigate(['/error']);
         }
       ) 
     } 
+
+    let answers = {
+      respuesta1: formValue.textoRespuesta1,
+      respuesta2: formValue.textoRespuesta2,
+      respuesta3: formValue.textoRespuesta3,
+      respuesta4: formValue.textoRespuesta4
+    }
+
+    this.newValues.emit(answers);
   }
 
 }
