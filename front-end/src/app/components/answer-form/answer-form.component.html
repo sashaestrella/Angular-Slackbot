@@ -37,8 +37,11 @@
             </div>
           </fieldset>
 
-          <button *ngIf="values === undefined" [disabled]="answerForm.invalid" type="submit" class="btn btn-primary" style="color: white;" mat-button matStepperNext>Continuar</button>
-          <button *ngIf="values !== undefined" type="button" class="btn btn-danger" style="margin-top: -3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
+          <div matTooltip="Completa todos los campos para poder continuar" [matTooltipDisabled]="!answerForm.invalid"> 
+            <button *ngIf="values === undefined" [disabled]="answerForm.invalid" type="submit" class="btn btn-primary" style="color: white;" mat-button matStepperNext>Continuar</button>
+            <button *ngIf="values !== undefined" [disabled]="answerForm.invalid" type="button" class="btn btn-danger" style="margin-top: -3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
+          </div>
+
           <button *ngIf="agregar" type="submit" class="btn btn-primary" style="margin-top: 3%;">Agregar</button>
         </form>
       </div>

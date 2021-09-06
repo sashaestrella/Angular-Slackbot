@@ -5,6 +5,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-step-header .mat-step-label, .mat-step-header .mat-step-optional {
     color: white;
  }
+@font-face {
+    font-family: pixel;
+    src: url(/../../assets/fonts/Gilroy-Medium.woff) format("opentype");
+}
 .mat-step-header .mat-step-label.mat-step-label-active {
     color: white;
 }
@@ -20,4 +24,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .form-control:focus {
     border-color: rgb(118, 4, 153);
     box-shadow: 0 0 0 0.2rem rgb(205, 177, 214);
-  } 
+}
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+    padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-family: pixel;
+}

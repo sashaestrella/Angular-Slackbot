@@ -35,9 +35,9 @@ export class BackendService {
     return this.http.delete<any>(`${this.URL}/eliminarPregunta/` + id);
   }
 
-  deleteAnswer(idPregunta: any, idRespuesta: any) {
+  /* deleteAnswer(idPregunta: any, idRespuesta: any) {
     return this.http.delete<any>(`${this.URL}/eliminarRespuesta/` + idPregunta + '/' + idRespuesta);
-  }
+  } */
 
   editAnswers(id: any, answers: any) {
     return this.http.put<any>(`${this.URL}/editarRespuestas/` + id, answers);

@@ -6,12 +6,16 @@
               <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-2 col-form-label"><mark>Texto de la pregunta:</mark></label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputQuestion"  name="textoPregunta" formControlName="textoPregunta" (focusout)="cambio(f.textoPregunta.value)">
+                  <input type="text" class="form-control" id="inputQuestion" name="textoPregunta" formControlName="textoPregunta" (focusout)="cambio(f.textoPregunta.value)">
                 </div>
               </div>
-  
-              <button *ngIf="values === undefined" [disabled]="questionForm.invalid" type="submit" class="btn btn-primary" style="margin-top: 3%; color: white;" mat-button matStepperNext>Continuar</button>
-              <button *ngIf="values !== undefined" type="button" class="btn btn-danger" style="margin-top: 3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
+
+              <div matTooltip="Completa el texto de la pregunta para poder continuar" [matTooltipDisabled]="!questionForm.invalid"> 
+                <button *ngIf="values === undefined" [disabled]="questionForm.invalid" type="submit" class="btn btn-primary" 
+                style="margin-top: 3%; color: white;" matStepperNext>Continuar</button>
+                <button *ngIf="values !== undefined" [disabled]="questionForm.invalid" type="button" class="btn btn-danger" 
+                style="margin-top: 3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
+              </div>
             </form>
           </div>
       </div>

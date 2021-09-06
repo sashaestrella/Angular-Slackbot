@@ -24,6 +24,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatButtonModule } from '@angular/material/button';
 import { AnimatedBackgroundComponent } from './components/animated-background/animated-background.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { AnimatedBackgroundComponent } from './components/animated-background/an
     MatTableModule,
     MatDialogModule,
     MatButtonModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
