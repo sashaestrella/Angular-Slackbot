@@ -2,9 +2,6 @@ const { Router } = require("express");
 const router = Router();
 const questionModel = require('../models/question');
 
-let idQuestion = 0;
-let idAnswer = 0;
-
 router.delete('/eliminarPregunta/:id', function (req, res, next) {
     questionModel
         .eliminarPregunta(req.params.id)
@@ -103,28 +100,22 @@ router.post('/agregarPregunta', function (req, res, next) {
         return res.status(500).send("No hay valores ingresados");
     } 
 
-    idQuestion++;
-    
     questionModel
-        .insertarPregunta(idQuestion, question.descripcion_pregunta, question.respuesta_correcta)
+        .insertarPregunta(question.descripcion_pregunta, question.respuesta_correcta)
         .then(quest => {
-            console.log("se agregó la pregunta!!");
+            console.log("se agregó la pregunta!!", quest);
             for (var i=0; i < 4; i++) {
-                idAnswer++;
-        
                 questionModel
-                    .insertarRespuesta(idAnswer, idQuestion, answers[i].descripcion_respuesta)
+                    .insertarRespuesta(quest, answers[i].descripcion_respuesta)
                     .then(quest => {
                         console.log("se agregó la respuesta!!");
                     })
                     .catch(err => {
-                        idAnswer--;
                         return res.status(500).send("Error insertando la respuesta");
                     });
             }
         })
         .catch(err => {
-            idQuestion--;
             return res.status(500).send("Error insertando la pregunta");
         });
 });
@@ -134,8 +125,6 @@ router.post('/agregarRespuesta', function (req, res, next) {
     if (!descripcion_respuesta) {
         return res.status(500).send("No hay valores ingresados");
     }
-
-    idAnswer++;
 
     questionModel
         .insertarRespuesta(idAnswer, idQuestion, descripcion_respuesta)

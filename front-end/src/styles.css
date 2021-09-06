@@ -17,3 +17,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-color: white;
     color: black;
 }
+.form-control:focus {
+    border-color: rgb(118, 4, 153);
+    box-shadow: 0 0 0 0.2rem rgb(205, 177, 214);
+  } 

@@ -1,75 +1,166 @@
 const conexion = require("../database")
+const mysql = require('mysql');
 
 module.exports = {
-    insertarPregunta(id, textoPregunta, respuestaPregunta) {
+    iniciarConexion() {
+        let createConnection = mysql.createConnection({
+            host: 'docker-qa',
+            user: 'root',
+            password: '',
+            database: 'slackbot',
+        }); 
+        
+        return createConnection;
+    },
+    insertarPregunta(textoPregunta, respuestaPregunta) {
         return new Promise((resolve, reject) => {
-            conexion.query('insert into Preguntas values ('+ id + ',"' + textoPregunta + '","' + respuestaPregunta + '");', (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados.insertId);
-            });
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('insert into Preguntas (descripcion_pregunta,respuesta_correcta) values ("' + textoPregunta + '","' + respuestaPregunta + '");', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados.insertId);
+                        })
+                    } 
+                });
+            })
         });
     },
-    insertarRespuesta(idRespuesta, id, textoRespuesta) {
+    insertarRespuesta(id, textoRespuesta) {
         return new Promise((resolve, reject) => {
-            conexion.query('insert into Respuestas values ('+ idRespuesta + ',' + id + ',"' + textoRespuesta + '");', (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados.insertId);
-            });
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('insert into Respuestas (id_pregunta,descripcion_respuesta) values (' + id + ',"' + textoRespuesta + '");', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados.insertId);
+                        })
+                    } 
+                });
+            })
         });
     },
     obtenerPreguntas() {
         return new Promise((resolve, reject) => {
-            conexion.query('select * from Preguntas;', (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados);
-            });
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('select * from Preguntas;', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados);
+                        })
+                    } 
+                }); 
+            })
         });
     },
     obtenerRespuestas() {
         return new Promise((resolve, reject) => {
-            conexion.query('select * from Respuestas;', (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados);
-            });
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('select * from Respuestas;', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados);
+                        })
+                    } 
+                });
+            })
         });
     },
-    obtenerRespuestasDePregunta(idPregunta) {
+/*     obtenerRespuestasDePregunta(idPregunta) {
         return new Promise((resolve, reject) => {
             conexion.query('select * from Respuestas r join Preguntas p on p.id_pregunta = r.id_pregunta where r.id_pregunta = '+ idPregunta +';', (err, resultados) => {
                     if (err) reject(err);
                     else resolve(resultados);
             });
         });
-    },
+    }, */
     editarDescripcionPregunta(idPregunta, descripcion) {
         return new Promise((resolve, reject) => {
-            conexion.query('update Preguntas p set descripcion_pregunta = "' + descripcion + '" where p.id_pregunta = ' + idPregunta +';', (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados.insertId);
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('update Preguntas p set descripcion_pregunta = "' + descripcion + '" where p.id_pregunta = ' + idPregunta +';', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados.insertId);
+                        })
+                    } 
+                })
             });
         });
     },
     editarRespuestaCorrectaPregunta(idPregunta, respuesta) {
         return new Promise((resolve, reject) => {
-            conexion.query('update Preguntas p set respuesta_correcta = "' + respuesta + '" where p.id_pregunta = ' + idPregunta +';', (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados.insertId);
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('update Preguntas p set respuesta_correcta = "' + respuesta + '" where p.id_pregunta = ' + idPregunta +';', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados.insertId);
+                        })
+                    } 
+                })
             });
         });
     },
     eliminarPregunta(idPregunta) {
         return new Promise((resolve, reject) => {
-            conexion.query('delete from Preguntas where id_pregunta = '+ idPregunta +';', (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados.insertId);
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('delete from Preguntas where id_pregunta = '+ idPregunta +';', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados.insertId);
+                        })
+                    } 
+                })
             });
         });
     },
     editarRespuesta(idPregunta, id, respuesta) {
         return new Promise((resolve, reject) => {
-            conexion.query('update Respuestas r set descripcion_respuesta = "' + respuesta + '" where r.id_respuesta = '+ id + ';', (err, resultados) => {
-                if (err) reject(err);
-                else resolve(resultados.insertId);
+            let conexion = this.iniciarConexion();
+            conexion.connect((err) => {
+                if (err) return;
+                else conexion.query('update Respuestas r set descripcion_respuesta = "' + respuesta + '" where r.id_respuesta = '+ id + ';', (err, resultados) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        conexion.end((err) => {
+                            console.log("se ha cerrado la conexión");
+                            resolve(resultados.insertId);
+                        })
+                    } 
+                })
             });
         });
     }

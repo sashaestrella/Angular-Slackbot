@@ -164,6 +164,10 @@ export class ListadoPreguntasComponent implements OnInit {
   }
 
   eliminarPregunta(id: any) {
+    this.editar = false;
+    this.hayRespuestas = false;
+    this.editRespuesta = false;
+    
     this.backendService.deleteQuestion(id).subscribe(
       response => {
         console.log("Se eliminó la pregunta");

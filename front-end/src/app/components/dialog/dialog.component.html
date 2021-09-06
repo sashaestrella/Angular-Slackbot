@@ -1,7 +1,12 @@
 <div mat-dialog-content>
-    <p>{{mensaje}}</p>
-  </div>
-  <div mat-dialog-actions>
-    <button mat-button (click)="cerrarDialogo()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="accion" cdkFocusInitial>Aceptar</button>
-  </div>
+    <div style="margin-bottom: 5%;">
+      <button type="button" class="close" aria-label="Close" (click)="cerrarDialogo()">
+          <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <h3 style="font-family: pixel;">{{mensaje}}</h3>
+</div>
+<div mat-dialog-actions>
+  <button class="btn btn-outline-secondary" (click)="cerrarDialogo()" style="margin-right: 5%; font-family: pixel;">Cancelar</button>
+  <button class="btn btn-outline-primary" style="font-family: pixel;" [mat-dialog-close]="accion" cdkFocusInitial>Aceptar</button>
+</div>

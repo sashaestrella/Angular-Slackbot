@@ -4,15 +4,38 @@
     border-radius: 10px;
     font-family: pixel;
     background-color: rgb(115, 34, 150);
-    border-color: rgb(115, 34, 150);;
+    border-color: rgb(115, 34, 150);
 }
 
 .col-form-label {
     font-size: 90%;
-    margin-bottom: 4%;
+    margin-bottom: 2%;
 }
 
-.bordeAzul {
-    border-color: #5B6DCD;
-    border-width: 1px;
+input[type='radio']:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color: white;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid #d1d3d1;
+}
+
+input[type='radio']:checked:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color: rgb(115, 34, 150);
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid #2b2e2b;
 }

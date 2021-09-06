@@ -1,8 +1,14 @@
 <div class="container">
-    <p class="text-error">Ha ocurrido un error</p>
-    <h2 *ngIf="this.stepperService.showError" style="margin-top: 5%; color: white; font-family: pixel;">"{{ this.stepperService.questionError }}", <br>
-        se ha añadido, pero sus respuestas no. <br><br>
-        Podrás agregarlas en la sección "Ver listado"
-    </h2>
-    <button *ngIf="!this.stepperService.showError" type="submit" class="btn btn-primary" routerLink="/home">Reintentar</button>
+    <div class="row d-flex justify-content-center">
+        <div class="card text-center" style="width: 200%; font-size: 100%; background: rgb(71, 2, 92); border-color: transparent;">
+            <div class="card-body">
+                <p class="text-error">Ha ocurrido un error</p>
+                <!-- <h2 *ngIf="this.stepperService.showError" style="margin-top: 5%; color: white; font-family: pixel;">"{{ this.stepperService.questionError }}", <br>
+                    se ha añadido, pero sus respuestas no. <br><br>
+                    Podrás agregarlas en la sección "Ver listado"
+                </h2> -->
+                <button *ngIf="!this.stepperService.showError" type="submit" class="btn btn-primary" routerLink="/home">Reintentar</button>
+            </div>
+        </div>
+    </div>
 </div>

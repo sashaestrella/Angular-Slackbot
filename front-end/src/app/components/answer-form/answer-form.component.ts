@@ -4,7 +4,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StepperService } from 'src/services/stepper.service';
 import { Router } from '@angular/router';
-import { isThisTypeNode } from 'typescript/lib/tsserverlibrary';
 
 @Component({
   selector: 'answer-form',
@@ -104,4 +103,15 @@ export class AnswerFormComponent implements OnInit {
     this.newValues.emit(answers);
   }
 
+  cambio(element: string, textoPregunta: any){ 
+    const input = document.getElementById(element);
+    if (input != null) {
+      if(textoPregunta.length > 0) {
+        input.style.borderColor = "rgb(115, 34, 150)"
+        input.style.backgroundColor = "rgb(205, 177, 214)"
+      } else {
+        input.style.backgroundColor = "white"
+      }
+    } 
+  }
 }

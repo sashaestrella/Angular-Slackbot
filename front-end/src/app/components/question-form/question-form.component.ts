@@ -50,4 +50,15 @@ export class QuestionFormComponent implements OnInit {
     this.stepperService.questionError = formValue.textoPregunta;
   }
 
+  cambio(textoPregunta: any){ 
+    const input = document.getElementById('inputQuestion');
+    if (input != null) {
+      if(textoPregunta.length > 0) {
+        input.style.borderColor = "rgb(115, 34, 150)"
+        input.style.backgroundColor = "rgb(205, 177, 214)"
+      } else {
+        input.style.backgroundColor = "white"
+      }
+    } 
+  }
 }
