@@ -13,3 +13,30 @@ table {
     background-color: rgb(71, 2, 92);
     border-width: 2px;
 }
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+    padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-family: pixel;
+}
+
+@media all and (max-width: 360px){
+    td.mat-cell, td.mat-footer-cell {
+        font-size: 90%;
+        padding: 0;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        font-family: pixel;
+    }
+
+    th.mat-header-cell {
+        font-size: 65%;
+        padding: 0;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        font-family: pixel;
+    }
+}
+
+

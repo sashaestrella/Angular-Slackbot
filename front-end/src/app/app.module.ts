@@ -25,6 +25,7 @@ import { MatDialogModule } from '@angular/material/dialog'
 import { MatButtonModule } from '@angular/material/button';
 import { AnimatedBackgroundComponent } from './components/animated-background/animated-background.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTableModule,
     MatDialogModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
