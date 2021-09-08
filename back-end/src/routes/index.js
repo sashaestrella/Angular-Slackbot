@@ -59,6 +59,7 @@ router.put('/editarPregunta/:id', function (req, res, next) {
         .editarDescripcionPregunta(req.params.id, descripcion_pregunta)
         .then(quest => {
             console.log("se editó la descripcion de la pregunta");
+            return res.status(201).send()
         })
         .catch(err => {
             return res.status(500).send("Error editando la pregunta");
@@ -81,6 +82,7 @@ router.put('/editarRespuestas/:id', function (req, res, next) {
                     .editarRespuesta(req.params.id, ids[i], answers[i].descripcion_respuesta)
                     .then(quest => {
                         console.log("se editó la pregunta");
+                        return res.status(201).send()
                     })
                     .catch(err => {
                         return res.status(500).send("Error editando la pregunta");
@@ -104,36 +106,55 @@ router.post('/agregarPregunta', function (req, res, next) {
         .insertarPregunta(question.descripcion_pregunta, question.respuesta_correcta)
         .then(quest => {
             console.log("se agregó la pregunta!!", quest);
-            for (var i=0; i < 4; i++) {
+            questionModel
+                .insertarRespuesta(quest, answers[0].descripcion_respuesta, false)
+                .then(res1 => {
+                    console.log("se agregó la respuesta", res1.id, "!!");
+                    console.log('esUltima? ', res1.esUltima)
                 questionModel
-                    .insertarRespuesta(quest, answers[i].descripcion_respuesta)
-                    .then(quest => {
-                        console.log("se agregó la respuesta!!");
+                    .insertarRespuesta(quest, answers[1].descripcion_respuesta, false)
+                    .then(res2 => {
+                        console.log("se agregó la respuesta", res2.id, "!!");
+                        console.log('esUltima? ', res2.esUltima)
+                    questionModel
+                        .insertarRespuesta(quest, answers[2].descripcion_respuesta, false)
+                        .then(res3 => {
+                            console.log("se agregó la respuesta", res3.id, "!!");
+                            console.log('esUltima? ', res3.esUltima)
+                        questionModel
+                            .insertarRespuesta(quest, answers[3].descripcion_respuesta, true)
+                            .then(res4 => {
+                                console.log("se agregó la respuesta", res4.id, "!!");
+                                console.log('esUltima? ', res4.esUltima)
+                                if ( res4.esUltima ){
+                                    console.log("Vamos a responder con exito")
+                                    //return res.status(201).send()
+                                    return res.send(answers);
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                return res.status(500).send("Error insertando la respuesta");
+                            });
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            return res.status(500).send("Error insertando la respuesta");
+                        });
                     })
                     .catch(err => {
+                        console.error(err);
                         return res.status(500).send("Error insertando la respuesta");
                     });
-            }
+                })
+                .catch(err => {
+                    console.error(err);
+                    return res.status(500).send("Error insertando la respuesta");
+                });
+            
         })
         .catch(err => {
             return res.status(500).send("Error insertando la pregunta");
-        });
-});
-
-router.post('/agregarRespuesta', function (req, res, next) {
-    const { descripcion_respuesta } = req.body;
-    if (!descripcion_respuesta) {
-        return res.status(500).send("No hay valores ingresados");
-    }
-
-    questionModel
-        .insertarRespuesta(idAnswer, idQuestion, descripcion_respuesta)
-        .then(quest => {
-            console.log("se agregó la respuesta!!");
-        })
-        .catch(err => {
-            idAnswer--;
-            return res.status(500).send("Error insertando la respuesta");
         });
 });
 

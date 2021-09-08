@@ -1,3 +1,4 @@
+import { StepperService } from 'src/services/stepper.service';
 import { Answer } from './../../../models/answer.interface';
 import { BackendService } from './../../../services/backend.service';
 import { Component, Input, OnInit } from '@angular/core';
@@ -33,8 +34,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ListadoPreguntasComponent implements OnInit {
   @Input() newValues: any;
   values: any = [];
-  displayedColumns: string[] = ['id_pregunta', 'texto_pregunta', 'respuesta_correcta', 'respuestas', 'editar', 'eliminar'];
-  displayedColumns2: string[] = ['id_respuesta', 'id_pregunta', 'descripcion_respuesta', 'editarRespuesta'];
+  displayedColumns: string[] = ['id_pregunta', 'texto_pregunta', 'respuesta_correcta', 'respuestas', 'eliminar'];
+  displayedColumns2: string[] = ['id_respuesta', 'id_pregunta', 'descripcion_respuesta'];
   questions: any = [];
   answers: any = [];
   questionAnswers: any = [];
@@ -45,7 +46,7 @@ export class ListadoPreguntasComponent implements OnInit {
   questionId: any;
   answersForEdit: any = [];
 
-  constructor(private router: Router, private backendService: BackendService, public dialog: MatDialog) { }
+  constructor(private router: Router, private backendService: BackendService, public dialog: MatDialog, private stepperService: StepperService) { }
 
   ngOnInit(): void {
     this.backendService.getQuestions().subscribe(
@@ -68,7 +69,7 @@ export class ListadoPreguntasComponent implements OnInit {
   }
 
   openDialogForEdit(newValues: any): void {
-    this.editar = true;
+    //this.editar = true;
     const dialogRef = this.dialog.open(DialogComponent, {
       data: `¿Desea editar la pregunta seleccionada?`
     });
@@ -77,6 +78,7 @@ export class ListadoPreguntasComponent implements OnInit {
       this.editar = result;
       if(this.editar){
         this.editarEnLaBaseDeDatos(newValues);
+        window.location.reload();
       }
     });
   }
@@ -90,18 +92,19 @@ export class ListadoPreguntasComponent implements OnInit {
       this.editar = result;
       if(this.editar){
         this.editarRespuestaEnLaBaseDeDatos(newValues);
+        window.location.reload();
       }
     });
   }
 
-  editarPregunta(id: any) {
+ /*  editarPregunta(id: any) {
     this.questionId = id;
     this.editar = true;
-    this.hayRespuestas = false;
+    this.hayRespuestas = true;
     this.editRespuesta = false;
 
     this.question = this.questions.find((q: any) => q.id_pregunta == id);
-  }
+  } */
 
   editarEnLaBaseDeDatos(newValues: any) {
     this.editar = false;
@@ -117,12 +120,11 @@ export class ListadoPreguntasComponent implements OnInit {
         console.log("Error: ", error);
       }
     ) 
-    window.location.reload();
   }
 
   editarRespuestas(idPregunta: any) {
     this.questionId = idPregunta;
-    this.editRespuesta = true;
+    this.editRespuesta = this.editRespuesta ? false : true;
   }
 
   editarRespuestaEnLaBaseDeDatos(newValuesForAnswer: any) {
@@ -147,7 +149,6 @@ export class ListadoPreguntasComponent implements OnInit {
         console.log("Error: ", error);
       }
     ) 
-    window.location.reload();
   }
 
   openDialogForDelete(id: any) {
@@ -181,21 +182,22 @@ export class ListadoPreguntasComponent implements OnInit {
 
   verRespuestas(id: any) {
     this.editRespuesta = false;
-    this.hayRespuestas = true;
-    this.editar = false;
-    this.questionAnswers = this.answers.filter((ans: any) => ans.id_pregunta === id);
+    this.hayRespuestas = this.hayRespuestas ? false : true;
     this.question = this.questions.find((q: any) => q.id_pregunta == id);
+    this.questionAnswers = this.answers.filter((a: any) => a.id_pregunta == this.question.id_pregunta);
 
     this.values = {
       answers: this.questionAnswers,
       correctAnswer: this.question.respuesta_correcta
     }
+
+    this.questionId = id;
   }
 
   mostrarNuevasRespuestas(respuestas: any) {
-    this.answers = respuestas;
+    this.answers = respuestas
     this.hayRespuestas = false;
-    this.editar = false;
+    /* this.editar = false; */
     this.editRespuesta = false;
   }
 }

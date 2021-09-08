@@ -2,11 +2,20 @@ table {
     width: 100%;
 }
 
-.btn {
-    padding-left: 10%;
-    padding-right: 10%;
+.btn-cell {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
     border-radius: 10px;
     font-family: pixel;
+    margin-top: 5%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+}
+
+mat-icon {
+    margin-top: 20%;
 }
 
 .card-body {
@@ -21,9 +30,30 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
     font-family: pixel;
 }
 
+td.mat-cell, td.mat-footer-cell {
+    font-size: 85%;
+    padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-family: pixel;
+}
+
 @media all and (max-width: 360px){
+    mat-icon {
+        margin-top: 5%;
+    }
+
+    .btn-cell {
+        border-radius: 10px;
+        font-family: pixel;
+        margin-top: 10%;
+        margin-right: 10%;
+        margin-bottom: 10%;
+
+    }
+
     td.mat-cell, td.mat-footer-cell {
-        font-size: 90%;
+        font-size: 70%;
         padding: 0;
         border-bottom-width: 1px;
         border-bottom-style: solid;

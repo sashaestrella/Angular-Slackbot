@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row d-flex justify-content-center">
-      <div class="card text-center" style="width: 200%; font-size: 100%;">
+      <div class="card text-center" style="width: 200%; font-size: 80%;">
           <div class="card-body">
             <form [formGroup]="questionForm" (ngSubmit)="addQuestionToDatabase(questionForm.value)">
               <div class="form-group row">
@@ -13,8 +13,9 @@
               <div matTooltip="Completa el texto de la pregunta para poder continuar" [matTooltipDisabled]="!questionForm.invalid"> 
                 <button *ngIf="values === undefined" [disabled]="questionForm.invalid" type="submit" class="btn btn-primary" 
                 style="margin-top: 3%; color: white;" matStepperNext>Continuar</button>
-                <button *ngIf="values !== undefined" [disabled]="questionForm.invalid" type="button" class="btn btn-danger" 
-                style="margin-top: 3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
+                <button *ngIf="values !== undefined" [disabled]="questionForm.invalid" type="button" class="btn btn-primary" 
+                style="margin-top: 3%; font-size: 100%; padding-left: 10%;
+                padding-right: 10%; border-radius: 10px;" (click)="editarEnLaBaseDeDatos()">Guardar</button>
               </div>
             </form>
           </div>

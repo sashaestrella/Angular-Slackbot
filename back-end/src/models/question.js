@@ -30,7 +30,7 @@ module.exports = {
             })
         });
     },
-    insertarRespuesta(id, textoRespuesta) {
+    insertarRespuesta(id, textoRespuesta, esUltima) {
         return new Promise((resolve, reject) => {
             let conexion = this.iniciarConexion();
             conexion.connect((err) => {
@@ -39,10 +39,14 @@ module.exports = {
                     if (err) {
                         reject(err);
                     } else {
-                        conexion.end((err) => {
-                            console.log("se ha cerrado la conexión");
-                            resolve(resultados.insertId);
-                        })
+                        if(esUltima) {
+                            conexion.end((err) => {
+                                console.log("se ha cerrado la conexión");
+                                resolve({id: resultados.insertId, esUltima: esUltima});
+                            })  
+                        } else {
+                            resolve({id: resultados.insertId, esUltima: esUltima});
+                        }
                     } 
                 });
             })

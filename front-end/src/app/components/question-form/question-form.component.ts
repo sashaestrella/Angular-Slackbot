@@ -28,6 +28,11 @@ export class QuestionFormComponent implements OnInit {
         textoPregunta: this.values.descripcion_pregunta
       })
     }
+
+    var input = document.getElementById('inputQuestion')
+    if(input != null){
+      input.style.fontSize = '100%'
+    }
   }
 
   public get f() {

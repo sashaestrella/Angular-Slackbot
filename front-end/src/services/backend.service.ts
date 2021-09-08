@@ -1,7 +1,7 @@
-import { Answer } from './../models/answer.interface';
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class BackendService {
   constructor(private http: HttpClient) {}
 
-  private URL = 'http://localhost:3000/api';
+  private URL = environment.backendUrl;
 
   postQuestionAndAnswers(question: any): Observable<any> {
     return this.http.post<any>(`${this.URL}/agregarPregunta`, question)

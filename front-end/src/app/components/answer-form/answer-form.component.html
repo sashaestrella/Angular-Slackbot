@@ -1,45 +1,47 @@
 <div class="container">
   <div class="row d-flex justify-content-center">
-    <div class="card text-center" style="width: 200%; font-size: 100%;">
+    <div class="card text-center" style="width: 200%; font-size: 80%;">
       <div class="card-body">
       <form [formGroup]="answerForm" (ngSubmit)="addAnswerToDatabase(answerForm.value)">
           <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark>Texto de la respuesta a</mark></label>
+            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark>Descripción respuesta a</mark></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputAnswer1" placeholder="respuesta" formControlName="textoRespuesta1" (focusout)="cambio('inputAnswer1',f.textoRespuesta1.value)">
+              <input type="text" class="form-control" id="inputAnswer1" placeholder="respuesta" name="textoRespuesta1" formControlName="textoRespuesta1" (focusout)="cambio('inputAnswer1',f.textoRespuesta1.value)">
             </div>
 
-            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark> Texto de la respuesta b</mark></label>
+            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark> Descripción respuesta b</mark></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputAnswer2" placeholder="respuesta" formControlName="textoRespuesta2" (focusout)="cambio('inputAnswer2',f.textoRespuesta2.value)">
+              <input type="text" class="form-control" id="inputAnswer2" placeholder="respuesta" name="textoRespuesta2" formControlName="textoRespuesta2" (focusout)="cambio('inputAnswer2',f.textoRespuesta2.value)">
             </div>
 
-            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark> Texto de la respuesta c</mark></label>
+            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark> Descripción respuesta c</mark></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputAnswer3" placeholder="respuesta" formControlName="textoRespuesta3" (focusout)="cambio('inputAnswer3',f.textoRespuesta3.value)">
+              <input type="text" class="form-control" id="inputAnswer3" placeholder="respuesta" name="textoRespuesta3" formControlName="textoRespuesta3" (focusout)="cambio('inputAnswer3',f.textoRespuesta3.value)">
             </div>
 
-            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark> Texto de la respuesta d</mark></label>
+            <label for="inputEmail3" class="col-sm-2 col-form-label"><mark>Descripción respuesta d</mark></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputAnswer4" placeholder="respuesta" formControlName="textoRespuesta4" (focusout)="cambio('inputAnswer4',f.textoRespuesta4.value)">
+              <input type="text" class="form-control" id="inputAnswer4" placeholder="respuesta" name="textoRespuesta4" formControlName="textoRespuesta4" (focusout)="cambio('inputAnswer4',f.textoRespuesta4.value)">
             </div> 
           </div>
 
           <fieldset class="form-group">
             <div class="row">
               <legend class="col-form-label col-sm-2 pt-0"><mark>Selecciona la respuesta correcta a la pregunta: </mark></legend>
-                <div class="form-check form-check-inline" *ngFor="let answer of answers" style="margin-left: 1.6%; margin-bottom: 7%;">
-                  <input class="form-check-input" type="radio" name="respuestaPregunta" id="gridRadios1" [value]="answer" formControlName="respuestaPregunta">
-                  <label class="form-check-label" for="gridRadios1">
-                    {{answer}}
-                  </label>
-                </div>
+              <div class="form-check form-check-inline"  *ngFor="let answer of answers" style="margin-left: 1.6%; margin-bottom: 7%;">
+                <input class="form-check-input" type="radio" name="respuestaPregunta" id="gridRadios1" [value]="answer" formControlName="respuestaPregunta">
+                <label class="form-check-label" for="gridRadios1">
+                  {{answer}}
+                </label>
+              </div>
             </div>
           </fieldset>
 
           <div matTooltip="Completa todos los campos para poder continuar" [matTooltipDisabled]="!answerForm.invalid"> 
             <button *ngIf="values === undefined" [disabled]="answerForm.invalid" type="submit" class="btn btn-primary" style="color: white;" mat-button matStepperNext>Continuar</button>
-            <button *ngIf="values !== undefined" [disabled]="answerForm.invalid" type="button" class="btn btn-danger" style="margin-top: -3%;" (click)="editarEnLaBaseDeDatos()">Editar</button>
+            <button *ngIf="values !== undefined" [disabled]="answerForm.invalid" type="button" class="btn btn-primary" 
+            style="margin-top: -3%; font-size: 100%; padding-left: 10%;
+            padding-right: 10%; border-radius: 10px;" (click)="editarEnLaBaseDeDatos()">Guardar</button>
           </div>
 
           <button *ngIf="agregar" type="submit" class="btn btn-primary" style="margin-top: 3%;">Agregar</button>

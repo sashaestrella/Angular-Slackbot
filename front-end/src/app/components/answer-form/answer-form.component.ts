@@ -31,7 +31,7 @@ export class AnswerFormComponent implements OnInit {
       respuestaPregunta: new FormControl('', Validators.required)
     })
 
-    if(this.values !== undefined && this.agregar == false) {
+    if(this.values !== undefined && this.agregar == false) {  
       this.answerForm.patchValue({
         textoRespuesta1: this.values.answers[0].descripcion_respuesta,
         textoRespuesta2: this.values.answers[1].descripcion_respuesta,
@@ -39,6 +39,25 @@ export class AnswerFormComponent implements OnInit {
         textoRespuesta4: this.values.answers[3].descripcion_respuesta,
         respuestaPregunta: this.values.correctAnswer
       })
+    }
+
+    var input = document.getElementById('inputAnswer1')
+    var input2 = document.getElementById('inputAnswer2')
+    var input3 = document.getElementById('inputAnswer3')
+    var input4 = document.getElementById('inputAnswer4')
+    if(input && input2 && input3 && input4 ){
+      input.style.fontSize = '100%'
+      input2.style.fontSize = '100%'
+      input3.style.fontSize = '100%'
+      input4.style.fontSize = '100%'
+    } else if (input) {
+      input.style.fontSize = '100%'
+    } else if (input2) {
+      input2.style.fontSize = '100%'
+    } else if (input3) {
+      input3.style.fontSize = '100%'
+    } else if (input4) {
+      input4.style.fontSize = '100%'
     }
   }
 
@@ -72,16 +91,20 @@ export class AnswerFormComponent implements OnInit {
     this.stepperService.answersForm = formValue;
     this.stepperService.questionForm.respuesta_correcta = formValue.respuestaPregunta;
 
-    let answer1: Answer = {
+    let answer1: any = {
+      numero_de_pregunta: 1,
       descripcion_respuesta: formValue.textoRespuesta1
     }
-    let answer2: Answer = {
+    let answer2: any = {
+      numero_de_pregunta: 2,
       descripcion_respuesta: formValue.textoRespuesta2
     }
-    let answer3: Answer = {
+    let answer3: any = {
+      numero_de_pregunta: 3,
       descripcion_respuesta: formValue.textoRespuesta3
     }
-    let answer4: Answer = {
+    let answer4: any = {
+      numero_de_pregunta: 4,
       descripcion_respuesta: formValue.textoRespuesta4
     }
 
@@ -94,13 +117,12 @@ export class AnswerFormComponent implements OnInit {
     this.backendService.postQuestionAndAnswers(questionPost).subscribe(
       response => {
         console.log("se insertó la pregunta con las respuestas");
+        this.newValues.emit(response);
       },
       error => {
         this.router.navigate(['/error']);
       }
     )
-
-    this.newValues.emit(answers);
   }
 
   cambio(element: string, textoPregunta: any){ 
