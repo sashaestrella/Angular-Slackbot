@@ -1,31 +1,38 @@
+/* Components */
 import { HomeComponent } from './pages/home/home.component';
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AnswerFormComponent } from './components/answer-form/answer-form.component';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuestionFormComponent } from './components/question-form/question-form.component';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
 import { ConfirmationDataComponent } from './components/confirmation-data/confirmation-data.component';
-import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './components/footer/footer.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ListadoPreguntasComponent } from './pages/listado-preguntas/listado-preguntas.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { AnimatedBackgroundComponent } from './components/animated-background/animated-background.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { RankingComponent } from './pages/ranking/ranking.component';
+
+
+/* Modules */
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { HttpClientModule } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatButtonModule } from '@angular/material/button';
-import { AnimatedBackgroundComponent } from './components/animated-background/animated-background.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ChartsModule } from 'ng2-charts';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -39,7 +46,9 @@ import { MatIconModule } from '@angular/material/icon';
     NavbarComponent,
     ListadoPreguntasComponent,
     DialogComponent,
-    AnimatedBackgroundComponent
+    AnimatedBackgroundComponent,
+    LoadingComponent,
+    RankingComponent
   ],
   imports: [
     CommonModule,
@@ -56,9 +65,12 @@ import { MatIconModule } from '@angular/material/icon';
     MatDialogModule,
     MatButtonModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule,
+    ChartsModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,0 +1,172 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row cards-top">
+          <div class="col-xl-3 col-lg-6">
+            <div class="card azul card-stats mb-4 mb-xl-0">
+              <div class="overlay"></div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">Usuarios que contestaron</h5>
+                    <span class="h2 font-weight-bold mb-0">{{ usernames.length }}</span>
+                  </div>
+                  <div class="col-auto">
+                    <div class="icon icon-shape text-primary rounded-circle shadow">
+                      <fa-icon [icon]="usersIcon"></fa-icon>
+                    </div>
+                  </div>
+                </div>
+                <p class="mt-3 mb-0 text-muted text-sm">
+                  <span class="text-primary mr-2"><i class="fa fa-arrow-up"></i> {{ usersPorcentaje(usernames.length) }}%</span>
+                </p>
+              </div>
+            </div> 
+          </div>
+          <div class="col-xl-3 col-lg-6">
+            <div class="card verde card-stats mb-4 mb-xl-0">
+              <div class="overlay"></div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">Respuestas correctas</h5>
+                    <span class="h2 font-weight-bold mb-0">{{ correctAnswers }}</span>
+                  </div>
+                  <div class="col-auto">
+                    <div class="icon icon-shape text-success rounded-circle shadow">
+                      <fa-icon [icon]="checkIcon"></fa-icon>
+                    </div>
+                  </div>
+                </div>
+                <p class="mt-3 mb-0 text-muted text-sm">
+                  <span class="text-success mr-2"><i class="fas fa-arrow-down"></i> {{ usersPorcentaje(correctAnswers) }}%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-6">
+            <div class="card rojo card-stats mb-4 mb-xl-0">
+              <div class="overlay"></div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">Respuestas incorrectas</h5>
+                    <span class="h2 font-weight-bold mb-0">{{ incorrectAnswers }}</span>
+                  </div>
+                  <div class="col-auto">
+                    <div class="icon icon-shape text-danger rounded-circle shadow">
+                      <fa-icon [icon]="timesTcon"></fa-icon>
+                    </div>
+                  </div>
+                </div>
+                <p class="mt-3 mb-0 text-muted text-sm">
+                  <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{ usersPorcentaje(incorrectAnswers) }}%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-6">
+            <div class="card amarillo card-stats mb-4 mb-xl-0">
+              <div class="overlay"></div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <h5 class="card-title text-uppercase text-muted mb-0">Respuestas sin contestar</h5>
+                    <span class="h2 font-weight-bold mb-0">{{ unansweredAnswers }}</span>
+                  </div>
+                  <div class="col-auto">
+                    <div class="icon icon-shape text-warning rounded-circle shadow">
+                      <fa-icon [icon]="exclamationIcon"></fa-icon>
+                    </div>
+                  </div>
+                </div>
+                <p class="mt-3 mb-0 text-muted text-sm">
+                  <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{ usersPorcentaje(unansweredAnswers) }}%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row" style="margin: 2%;">
+  <div class="col-md-4">
+    <div class="card shadow">
+      <canvas baseChart
+        [data]="doughnutChartData"
+        [labels]="doughnutChartLabels"
+        [chartType]="doughnutChartType"
+        [colors]="doughnutChartColors"
+        style="margin-bottom: 11.6%; margin-top: 5%; ">
+      </canvas>
+    </div>
+  </div>
+  <div class="col-md-4 ranking-table">
+    <div class="card shadow">
+      <div class="card-header border-0">
+        <div class="row align-items-center">
+          <div class="col">
+            <h3 class="mb-0 ranking-text">Ranking</h3>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <table class="table table-hover">
+          <thead> 
+            <tr> 
+              <th>Nombre de usuario</th>
+              <th>Respuestas correctas</th>
+            </tr> 
+          </thead>
+          <tbody *ngFor="let user of usernames" >
+            <tr>
+              <td>
+                {{ user }}
+              </td>
+              <td class="text-success" [ngClass]="{'text-danger' : (userCorrectAnswer(user) == 0 || questionsPorcentaje(user) < '50')}">
+                {{ userCorrectAnswer(user) }}
+              </td>
+              <!-- <td>
+                <div class="d-flex align-items-center">
+                  <span class="mr-2">{{ questionsPorcentaje(user) }}%</span>
+                </div>
+              </td> -->
+            </tr>
+            <tr >
+          </tbody>
+        </table>
+     </div> 
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card shadow">
+      <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+          <div class="col">
+              <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+              <h2 class="mb-0">Porcentaje de resultados</h2>
+          </div>
+          </div>
+      </div>
+      <div class="card-body">
+          <div class="chart">
+            <div>
+              <div style="display: block">
+                <canvas baseChart
+                        [datasets]="barChartData"
+                        [labels]="barChartLabels"
+                        [options]="barChartOptions"
+                        [legend]="barChartLegend"
+                        [chartType]="barChartType"
+                        [colors]="barChartColors">
+                </canvas>
+              </div>
+            </div> 
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -11,13 +11,14 @@ export class BackendService {
 
   private URL = environment.backendUrl;
 
+  /* Questions */
   postQuestionAndAnswers(question: any): Observable<any> {
     return this.http.post<any>(`${this.URL}/agregarPregunta`, question)
   }
 
-  /* postAnswer(answer: any): Observable<any> {
-    return this.http.post<any>(`${this.URL}/agregarRespuesta`, answer)
-  } */
+  postAnswers(answers: any): Observable<any> {
+    return this.http.post<any>(`${this.URL}/agregarRespuestas`, answers)
+  }
   
   getQuestions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.URL}/obtenerPreguntas`);
@@ -34,12 +35,17 @@ export class BackendService {
   deleteQuestion(id: any) {
     return this.http.delete<any>(`${this.URL}/eliminarPregunta/` + id);
   }
-
-  /* deleteAnswer(idPregunta: any, idRespuesta: any) {
-    return this.http.delete<any>(`${this.URL}/eliminarRespuesta/` + idPregunta + '/' + idRespuesta);
-  } */
-
+  
   editAnswers(id: any, answers: any) {
     return this.http.put<any>(`${this.URL}/editarRespuestas/` + id, answers);
+  }
+
+  /* Users */
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.URL}/obtenerUsuarios`);
+  }
+
+  getUsersAnswers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.URL}/obtenerRespuestasUsuarios`);
   }
 }

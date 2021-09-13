@@ -2,6 +2,13 @@
     font-family: pixel;
     font-size: 400%;
     color: bisque;
+    margin-bottom: 20%;
+}
+
+.text-error2 {
+    font-family: pixel;
+    font-size: 200%;
+    color: bisque;
 }
 
 .container {
@@ -20,4 +27,17 @@
     font-family: pixel;
     background-color: rgb(115, 34, 150);
     border-color: rgb(115, 34, 150);;
+}
+
+@media all and (max-width: 360px){
+    .text-error {
+        font-family: pixel;
+        font-size: 200%;
+        color: bisque;
+    }
+    .text-error2 {
+        font-family: pixel;
+        font-size: 100%;
+        color: bisque;
+    }
 }

@@ -7,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./error.component.css']
 })
 export class ErrorComponent implements OnInit {
+  message: string = '';
 
   constructor(public stepperService: StepperService) { }
 
   ngOnInit(): void {
+    this.message = this.stepperService.messageError;
   }
 }

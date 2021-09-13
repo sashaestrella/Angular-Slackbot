@@ -1,0 +1,143 @@
+.ranking-text {
+    font-family: ranking;
+    font-size: 150%;
+}
+
+.header {
+    margin-left: 2%;
+}
+
+thead, tbody { 
+    display: block; 
+}
+
+table {
+    width: 100%;
+}
+
+thead tr {
+    background-color: aquamarine;
+}
+
+thead th {
+    width: 5%; 
+    color: black;
+}
+
+tbody td {
+    width: 11%;
+}
+
+tbody {
+    height: 285px;      
+    overflow-y: auto;    
+    overflow-x: hidden; 
+}
+
+.cards-top {
+    margin-right: 1.2%;
+}
+
+.card {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 14px 26px rgba(0,0,0,0.04);
+    transition: all 0.3s ease-out;
+    text-decoration: none;
+  }
+
+.card:hover {
+    transform: translateY(-5px) scale(1.005) translateZ(0);
+    box-shadow: 0 24px 36px rgba(0,0,0,0.11),
+      0 24px 46px var(--box-shadow-color);
+}
+  
+.card:hover .overlay {
+    transform: scale(4) translateZ(0);
+}
+
+.card:active {
+    transform: scale(1) translateZ(0);
+    box-shadow: 0 15px 24px rgba(0,0,0,0.11),
+      0 15px 24px var(--box-shadow-color);
+}
+
+.overlay {
+    width: 200px;
+    position: absolute; 
+    height: 200px;
+    border-radius: 50%;
+    background: var(--bg-color);
+    top: 10px;
+    left: 65%;
+    z-index: 0;
+    transition: transform 0.3s ease-out;
+  }
+
+.azul {
+    --bg-color: #DCE9FF;
+    --bg-color-light: #f1f7ff;
+    --text-color-hover: #4C5656;
+    --box-shadow-color: rgba(220, 233, 255, 0.48);
+}
+
+.verde {
+    --bg-color: #B8F9D3;
+    --bg-color-light: #e2fced;
+    --text-color-hover: #4C5656;
+    --box-shadow-color: rgba(184, 249, 211, 0.48);
+}
+
+.rojo {
+    --bg-color: #f9b8b8;
+    --bg-color-light: #e2fced;
+    --text-color-hover: #4C5656;
+    --box-shadow-color: rgba(249, 188, 184, 0.48);
+}
+
+.amarillo {
+    --bg-color: #ffd861;
+    --bg-color-light: #ffeeba;
+    --text-color-hover: #4C5656;
+    --box-shadow-color: rgba(255, 215, 97, 0.48);
+}
+
+.card:hover {
+    border-color: var(--bg-color-light);
+}
+
+
+@media all and (max-width: 360px){
+    tbody {
+        height: 200px;      
+        overflow-y: auto;   
+        overflow-x: hidden;  
+    }
+    tbody td {
+        width: 11%;
+    }
+    .ranking-text {
+        font-size: 150%;
+    }
+    .ranking-table {
+        font-size: 60%;
+        background-color: transparent; 
+        border-radius: 5px;
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+    .cards-top {
+        margin-right: 1.2%;
+        margin-left: 0;
+    }
+    .container {
+        position: relative;
+        width: 290px;
+        border-radius: 5px;
+        margin-bottom: 8%;
+    }
+}
+
+

@@ -1,30 +1,9 @@
-import { StepperService } from 'src/services/stepper.service';
-import { Answer } from './../../../models/answer.interface';
+import { Router } from '@angular/router';
 import { BackendService } from './../../../services/backend.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router, Routes } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+import { StepperService } from 'src/services/stepper.service';
 
 @Component({
   selector: 'app-listado-preguntas',
@@ -33,43 +12,51 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ListadoPreguntasComponent implements OnInit {
   @Input() newValues: any;
+
   values: any = [];
   displayedColumns: string[] = ['id_pregunta', 'texto_pregunta', 'respuesta_correcta', 'respuestas', 'eliminar'];
-  displayedColumns2: string[] = ['id_respuesta', 'id_pregunta', 'descripcion_respuesta'];
   questions: any = [];
   answers: any = [];
   questionAnswers: any = [];
   hayRespuestas: boolean = false;
   editar: boolean = false;
-  editRespuesta: boolean = false;
   question: any;
   questionId: any;
-  answersForEdit: any = [];
+  loadingVisible: boolean = false;
 
-  constructor(private router: Router, private backendService: BackendService, public dialog: MatDialog, private stepperService: StepperService) { }
+  constructor(private backendService: BackendService, public dialog: MatDialog, private router: Router, private stepperService: StepperService) { }
 
   ngOnInit(): void {
+    this.getQuestionsAndAnswers();
+  }
+
+  getQuestionsAndAnswers() {
+    this.loadingVisible = true;
     this.backendService.getQuestions().subscribe(
       response => {
         this.questions = response;
       },
       error => {
-        console.log("Error: ", error);
+        this.loadingVisible = false;
+        this.stepperService.messageError = error.error;
+        this.router.navigate(['/error']);
       }
     )
 
     this.backendService.getAnswers().subscribe(
       response => {
+        this.loadingVisible = false;
         this.answers = response;
       },
       error => {
-        console.log("Error: ", error);
+        this.loadingVisible = false;
+        this.stepperService.messageError = error.error;
+        this.router.navigate(['/error']);
       }
     )
   }
 
   openDialogForEdit(newValues: any): void {
-    //this.editar = true;
     const dialogRef = this.dialog.open(DialogComponent, {
       data: `¿Desea editar la pregunta seleccionada?`
     });
@@ -77,10 +64,31 @@ export class ListadoPreguntasComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.editar = result;
       if(this.editar){
-        this.editarEnLaBaseDeDatos(newValues);
-        window.location.reload();
+        this.editarPreguntaEnLaBaseDeDatos(newValues);
+        this.editarPregunta(newValues);
       }
     });
+  }
+
+  editarPregunta(newValues: any) {
+    let quest = this.questions.find((q: any) => q.id_pregunta == this.question.id_pregunta);
+    quest.descripcion_pregunta = newValues.descripcion_pregunta;
+  }
+  
+  editarPreguntaEnLaBaseDeDatos(newValues: any) {
+    this.editar = false;
+    this.hayRespuestas = false;
+
+    this.backendService.editQuestion(this.questionId, newValues).subscribe(
+      response => {
+        console.log("Se editó la pregunta");
+      },
+      error => {
+        this.editar = false;
+        this.stepperService.messageError = error.error;
+        this.router.navigate(['/error']);
+      }
+    ) 
   }
 
   openDialogForEditAnswers(newValues: any) {
@@ -92,44 +100,26 @@ export class ListadoPreguntasComponent implements OnInit {
       this.editar = result;
       if(this.editar){
         this.editarRespuestaEnLaBaseDeDatos(newValues);
-        window.location.reload();
+        this.editarRespuestas(this.question.id_pregunta,newValues);
       }
     });
   }
 
- /*  editarPregunta(id: any) {
-    this.questionId = id;
-    this.editar = true;
-    this.hayRespuestas = true;
-    this.editRespuesta = false;
-
-    this.question = this.questions.find((q: any) => q.id_pregunta == id);
-  } */
-
-  editarEnLaBaseDeDatos(newValues: any) {
-    this.editar = false;
-    this.hayRespuestas = false;
-    this.editRespuesta = false;
-
-    this.backendService.editQuestion(this.questionId, newValues).subscribe(
-      response => {
-        console.log("Se editó la pregunta");
-      },
-      error => {
-        this.editar = false;
-        console.log("Error: ", error);
-      }
-    ) 
-  }
-
-  editarRespuestas(idPregunta: any) {
+  editarRespuestas(idPregunta: any, newValues: any) {
     this.questionId = idPregunta;
-    this.editRespuesta = this.editRespuesta ? false : true;
+    let quest = this.questions.find((q: any) => q.id_pregunta == this.questionId);
+    let answersQuest = this.answers.filter((a: any) => a.id_pregunta == this.questionId);
+
+    answersQuest[0].descripcion_respuesta = newValues.answers[0].descripcion_respuesta;
+    answersQuest[1].descripcion_respuesta = newValues.answers[1].descripcion_respuesta;
+    answersQuest[2].descripcion_respuesta = newValues.answers[2].descripcion_respuesta;
+    answersQuest[3].descripcion_respuesta = newValues.answers[3].descripcion_respuesta;
+    quest.respuesta_correcta = newValues.question;
   }
 
   editarRespuestaEnLaBaseDeDatos(newValuesForAnswer: any) {
-    console.log(newValuesForAnswer);
     let ids = this.questionAnswers.map((a: any) => a.id_respuesta);
+
     let answersToEdit = {
       answers: newValuesForAnswer.answers,
       ids: ids,
@@ -137,7 +127,6 @@ export class ListadoPreguntasComponent implements OnInit {
     }
 
     this.editar = false;
-    this.editRespuesta = false;
     this.hayRespuestas = false;
 
     this.backendService.editAnswers(this.questionId, answersToEdit).subscribe(
@@ -146,7 +135,8 @@ export class ListadoPreguntasComponent implements OnInit {
       },
       error => {
         this.editar = false;
-        console.log("Error: ", error);
+        this.stepperService.messageError = error.error;
+        this.router.navigate(['/error']);
       }
     ) 
   }
@@ -158,30 +148,29 @@ export class ListadoPreguntasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.editar = result;
-      if(this.editar){
-        this.eliminarPregunta(id);
+      if(this.editar){ 
+        this.eliminarPreguntaEnLaBaseDeDatos(id);
+        this.questions = this.questions.filter((q: any) => q.id_pregunta != id);
       }
     });
   }
 
-  eliminarPregunta(id: any) {
+  eliminarPreguntaEnLaBaseDeDatos(id: any) {
     this.editar = false;
     this.hayRespuestas = false;
-    this.editRespuesta = false;
     
     this.backendService.deleteQuestion(id).subscribe(
       response => {
         console.log("Se eliminó la pregunta");
       },
       error => {
-        console.log("Error: ", error);
+        this.stepperService.messageError = error.error;
+        this.router.navigate(['/error']);
       }
     )
-    window.location.reload();
   }
 
   verRespuestas(id: any) {
-    this.editRespuesta = false;
     this.hayRespuestas = this.hayRespuestas ? false : true;
     this.question = this.questions.find((q: any) => q.id_pregunta == id);
     this.questionAnswers = this.answers.filter((a: any) => a.id_pregunta == this.question.id_pregunta);
@@ -190,14 +179,7 @@ export class ListadoPreguntasComponent implements OnInit {
       answers: this.questionAnswers,
       correctAnswer: this.question.respuesta_correcta
     }
-
+    
     this.questionId = id;
-  }
-
-  mostrarNuevasRespuestas(respuestas: any) {
-    this.answers = respuestas
-    this.hayRespuestas = false;
-    /* this.editar = false; */
-    this.editRespuesta = false;
   }
 }

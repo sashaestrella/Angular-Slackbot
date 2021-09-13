@@ -9,6 +9,11 @@ body { margin: 0; margin-bottom: 120px; font-family: Roboto, "Helvetica Neue", s
     font-family: pixel;
     src: url(/../../assets/fonts/Gilroy-Medium.woff) format("opentype");
 }
+@font-face {
+    font-family: ranking;
+    src: url(/../../assets/fonts/KOMIKAP_.ttf) format("opentype");
+}
+
 .mat-step-header .mat-step-label.mat-step-label-active {
     color: white;
 }
@@ -24,4 +29,7 @@ body { margin: 0; margin-bottom: 120px; font-family: Roboto, "Helvetica Neue", s
 .form-control:focus {
     border-color: rgb(118, 4, 153);
     box-shadow: 0 0 0 0.2rem rgb(205, 177, 214);
+}
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke:violet;
 }

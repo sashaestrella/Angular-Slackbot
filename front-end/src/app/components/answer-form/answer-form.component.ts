@@ -11,16 +11,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./answer-form.component.css']
 })
 export class AnswerFormComponent implements OnInit {
-
-  constructor(private router: Router, private stepperService: StepperService, private backendService: BackendService) { }
-
   @Input() values: any;
-  @Input() agregar: boolean = false;
+  @Input() stepper: any;
   @Output() newValues: EventEmitter<any> = new EventEmitter<any>();
+
   answerForm!: FormGroup;
   answers = [
     'a', 'b', 'c', 'd'
   ]
+  loadingVisible: boolean = false;
+
+  constructor(private router: Router, private stepperService: StepperService, private backendService: BackendService) { }
 
   ngOnInit(): void {
     this.answerForm = new FormGroup({
@@ -31,16 +32,14 @@ export class AnswerFormComponent implements OnInit {
       respuestaPregunta: new FormControl('', Validators.required)
     })
 
-    if(this.values !== undefined && this.agregar == false) {  
-      this.answerForm.patchValue({
-        textoRespuesta1: this.values.answers[0].descripcion_respuesta,
-        textoRespuesta2: this.values.answers[1].descripcion_respuesta,
-        textoRespuesta3: this.values.answers[2].descripcion_respuesta,
-        textoRespuesta4: this.values.answers[3].descripcion_respuesta,
-        respuestaPregunta: this.values.correctAnswer
-      })
+    if(this.values !== undefined) {  
+      this.setValues();
     }
 
+    this.setStyles();
+  }
+
+  setStyles() {
     var input = document.getElementById('inputAnswer1')
     var input2 = document.getElementById('inputAnswer2')
     var input3 = document.getElementById('inputAnswer3')
@@ -59,6 +58,16 @@ export class AnswerFormComponent implements OnInit {
     } else if (input4) {
       input4.style.fontSize = '100%'
     }
+  }
+
+  setValues() {
+    this.answerForm.patchValue({
+      textoRespuesta1: this.values.answers[0].descripcion_respuesta,
+      textoRespuesta2: this.values.answers[1].descripcion_respuesta,
+      textoRespuesta3: this.values.answers[2].descripcion_respuesta,
+      textoRespuesta4: this.values.answers[3].descripcion_respuesta,
+      respuestaPregunta: this.values.correctAnswer
+    })
   }
 
   public get f() {
@@ -88,9 +97,8 @@ export class AnswerFormComponent implements OnInit {
   }
 
   addAnswerToDatabase(formValue: any) {
-    this.stepperService.answersForm = formValue;
-    this.stepperService.questionForm.respuesta_correcta = formValue.respuestaPregunta;
-
+    this.loadingVisible = true;
+    
     let answer1: any = {
       numero_de_pregunta: 1,
       descripcion_respuesta: formValue.textoRespuesta1
@@ -108,18 +116,23 @@ export class AnswerFormComponent implements OnInit {
       descripcion_respuesta: formValue.textoRespuesta4
     }
 
-    let answers = [answer1, answer2, answer3, answer4];
+    this.stepperService.answersForm = formValue;
+    this.stepperService.questionForm.respuesta_correcta = formValue.respuestaPregunta;
+
     let questionPost: any = {
       question: this.stepperService.questionForm,
-      answers: answers
+      answers: [answer1, answer2, answer3, answer4]
     }
 
     this.backendService.postQuestionAndAnswers(questionPost).subscribe(
       response => {
         console.log("se insertó la pregunta con las respuestas");
-        this.newValues.emit(response);
+        this.loadingVisible = false;
+        this.stepper.next();
       },
       error => {
+        this.loadingVisible = false;
+        this.stepperService.messageError = error.error;
         this.router.navigate(['/error']);
       }
     )

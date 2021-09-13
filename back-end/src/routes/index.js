@@ -1,15 +1,30 @@
 const { Router } = require("express");
 const router = Router();
 const questionModel = require('../models/question');
+const userModel = require('../models/user');
 
+/* Users */
+router.get('/obtenerRespuestasUsuarios', function (req, res, next) {
+    userModel
+        .obtenerRespuestasDeUsuarios()
+        .then(users => {
+            console.log("se obtuvieron los usuarios: ",users);
+            return res.send(users);
+        })
+        .catch(err => {
+            return res.status(500).send("Error obteniendo las respuestas de los usuarios");
+        });
+})
+
+/* Questions */
 router.delete('/eliminarPregunta/:id', function (req, res, next) {
     questionModel
         .eliminarPregunta(req.params.id)
         .then(quest => {
-            console.log("se eliminó la pregunta");
+            console.log("se eliminó la pregunta ",req.params.id);
         })
         .catch(err => {
-            return res.status(500).send("Error eliminando la pregunta");
+            return res.status(500).send(`Error eliminando la pregunta: ${req.params.id}`);
         });
 })
 
@@ -21,7 +36,7 @@ router.get('/obtenerPreguntas', function (req, res, next) {
             return res.send(quest);
         })
         .catch(err => {
-            return res.status(500).send("Error obteniendo las preguntas");
+            return res.status(500).send("Error obteniendo las preguntas de la DB");
         });
 });
 
@@ -33,19 +48,7 @@ router.get('/obtenerRespuestas', function (req, res, next) {
             return res.send(quest);
         })
         .catch(err => {
-            return res.status(500).send("Error obteniendo las respuestas");
-        });
-});
-
-router.get('/obtenerRespuestas/:id', function (req, res, next) {
-    questionModel
-        .obtenerRespuestasDePregunta(req.params.id)
-        .then(quest => {
-            console.log("se obtuvieron las respuestas", quest);
-            return res.send(quest);
-        })
-        .catch(err => {
-            return res.status(500).send("Error obteniendo las respuestas");
+            return res.status(500).send("Error obteniendo las respuestas de la DB");
         });
 });
 
@@ -62,7 +65,7 @@ router.put('/editarPregunta/:id', function (req, res, next) {
             return res.status(201).send()
         })
         .catch(err => {
-            return res.status(500).send("Error editando la pregunta");
+            return res.status(500).send(`Error editando la pregunta: ${req.params.id}`);
         });
 });
 
@@ -85,22 +88,23 @@ router.put('/editarRespuestas/:id', function (req, res, next) {
                         return res.status(201).send()
                     })
                     .catch(err => {
-                        return res.status(500).send("Error editando la pregunta");
+                        return res.status(500).send(`Error editando las respuestas de la pregunta: ${req.params.id}`);
                     });
             }
         })
         .catch(err => {
-            return res.status(500).send("Error editando la pregunta");
+            return res.status(500).send(`Error editando la respuesta correcta de la pregunta: ${req.params.id}`);
         });
 });
 
 router.post('/agregarPregunta', function (req, res, next) {
-    console.log(req.body);
     const { question, answers } = req.body;
 
-    if (!question || answers.length <= 0) {
-        return res.status(500).send("No hay valores ingresados");
-    } 
+    if (!question) {
+        return res.status(500).send("No hay valores ingresados para la pregunta");
+    } else if(!answers) {
+        return res.status(500).send("No hay valores ingresados para las respuestas");
+    }
 
     questionModel
         .insertarPregunta(question.descripcion_pregunta, question.respuesta_correcta)
@@ -134,28 +138,43 @@ router.post('/agregarPregunta', function (req, res, next) {
                             })
                             .catch(err => {
                                 console.error(err);
-                                return res.status(500).send("Error insertando la respuesta");
+                                eliminarPregunta(quest);
+                                return res.status(500).send(`Error insertando la respuesta: ${answers[3].descripcion_respuesta}`);
                             });
                         })
                         .catch(err => {
                             console.error(err);
-                            return res.status(500).send("Error insertando la respuesta");
+                            eliminarPregunta(quest);
+                            return res.status(500).send(`Error insertando la respuesta: ${answers[2].descripcion_respuesta}`);
                         });
                     })
                     .catch(err => {
                         console.error(err);
-                        return res.status(500).send("Error insertando la respuesta");
+                        eliminarPregunta(quest);
+                        return res.status(500).send(`Error insertando la respuesta: ${answers[1].descripcion_respuesta}`);
                     });
                 })
-                .catch(err => {
-                    console.error(err);
-                    return res.status(500).send("Error insertando la respuesta");
-                });
+            .catch(err => {
+                console.error(err);
+                eliminarPregunta(quest);
+                return res.status(500).send(`Error insertando la respuesta:  ${answers[0].descripcion_respuesta}`);
+            });
             
         })
         .catch(err => {
-            return res.status(500).send("Error insertando la pregunta");
+            return res.status(500).send(`Error insertando la pregunta: ${question.descripcion_pregunta}`);
         });
 });
+
+function eliminarPregunta(id, res) {
+    questionModel
+        .eliminarPregunta(id)
+        .then(quest => {
+            console.log("se eliminó la pregunta: ", id);
+        })
+        .catch(err => {
+            return res.status(500).send(`Error eliminando la pregunta: ${quest}`);
+        });
+}
 
 module.exports = router;

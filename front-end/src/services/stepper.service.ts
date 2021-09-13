@@ -8,5 +8,5 @@ export class StepperService {
     questionForm: any;
     answersForm: any;
     questionError: any;
-    showError: boolean = false;
+    messageError: string = '';
 }
